@@ -1,8 +1,25 @@
 const router = require("koa-router")();
 
 router.get("/", async (ctx, next) => {
+  //ejs渲染
   await ctx.render("index", {
     title: "Hello Koa 2!",
+    name: "fantasy",
+    isMe: true,
+    blogList: [
+      {
+        id: 1,
+        title: "aaa",
+      },
+      {
+        id: 2,
+        title: "aaa",
+      },
+      {
+        id: 3,
+        title: "aaa",
+      },
+    ],
   });
 });
 
