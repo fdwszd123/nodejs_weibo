@@ -28,8 +28,14 @@ router.get("/string", async (ctx, next) => {
 });
 
 router.get("/json", async (ctx, next) => {
+  const session = ctx.session;
+  if (session.count === null) {
+    session.count = 0;
+  }
+  session.count++;
   ctx.body = {
     title: "koa2 json",
+    count: session.count,
   };
 });
 router.get("/profile/:userName", async (ctx, next) => {

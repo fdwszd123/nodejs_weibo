@@ -5,11 +5,17 @@ const json = require("koa-json");
 const onerror = require("koa-onerror");
 const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
-
+const session = require("koa-generic-session");
+const redisStore = require("koa-redis");
 const index = require("./routes/index");
 const users = require("./routes/users");
+const errorViews = require("./routes/view/error");
+const { REDIS_CONF } = require("./conf/db");
 // error handler
-onerror(app);
+const onerrorConf = {
+  redirect: "/error",
+};
+onerror(app, onerrorConf);
 
 // middlewares
 app.use(
@@ -34,10 +40,27 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start;
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
+//session 配置
 
+app.keys = ["Fanagudh_49494#$%"];
+app.use(
+  session({
+    key: "weibo.sid", //cookie name
+    prefix: "weibo:sess:", //redis key的前缀
+    cookie: {
+      path: "/",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+    store: redisStore({
+      all: `${REDIS_CONF.host}:${REDIS_CONF.port}`,
+    }),
+  })
+);
 // routes
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
+app.use(errorViews.routes(), errorViews.allowedMethods());
 
 // error-handling
 app.on("error", (err, ctx) => {
