@@ -11,6 +11,7 @@ const {
   registerUserNameNotExist,
   registerUserNameExisted,
   registerFailInfo,
+  loginFailInfo,
 } = require("../model/ErrorInfo");
 const { getUserInfo, createUser } = require("../services/user");
 
@@ -43,7 +44,27 @@ async function register({ userName, password, gender }) {
     return new ErrorModel(registerFailInfo);
   }
 }
+
+/**
+ * 登录
+ * @param {*} ctx
+ * @param {*} userName
+ * @param {*} password
+ */
+async function login(ctx, userName, password) {
+  const userInfo = await getUserInfo(userName, doCrypto(password));
+  //success
+  if (userInfo) {
+    if (ctx.session.userInfo === undefined) {
+      ctx.session.userInfo = userInfo;
+    }
+    return new SuccessModel();
+  } else {
+    return new ErrorModel(loginFailInfo);
+  }
+}
 module.exports = {
   isExist,
   register,
+  login,
 };
