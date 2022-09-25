@@ -1,6 +1,6 @@
 const router = require("koa-router")();
-
-router.get("/", async (ctx, next) => {
+const { loginRedirect, loginCheck } = require("../middleWares/loginChecks");
+router.get("/", loginRedirect, async (ctx, next) => {
   //ejs渲染
   await ctx.render("index", {
     title: "Hello Koa 2!",
@@ -23,11 +23,11 @@ router.get("/", async (ctx, next) => {
   });
 });
 
-router.get("/string", async (ctx, next) => {
+router.get("/string", loginCheck, async (ctx, next) => {
   ctx.body = "koa2 string";
 });
 
-router.get("/json", async (ctx, next) => {
+router.get("/json", loginCheck, async (ctx, next) => {
   const session = ctx.session;
   if (session.count === null) {
     session.count = 0;
