@@ -14,4 +14,8 @@ module.exports = {
     errno: 10002,
     message: "注册失败",
   },
+  jsonSchemaFailInfo: {
+    errno: 1009,
+    message: "数据格式校验失败",
+  },
 };
