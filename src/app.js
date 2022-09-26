@@ -1,5 +1,7 @@
 const Koa = require("koa");
 const app = new Koa();
+const path = require("path");
+const koaStatic = require("koa-static");
 const views = require("koa-views");
 const json = require("koa-json");
 const onerror = require("koa-onerror");
@@ -10,6 +12,7 @@ const redisStore = require("koa-redis");
 const index = require("./routes/index");
 const userViewRouter = require("./routes/view/user");
 const userApiRouter = require("./routes/api/user");
+const utilsApiRouter = require("./routes/api/utils");
 const errorViews = require("./routes/view/error");
 const { REDIS_CONF } = require("./conf/db");
 // error handler
@@ -26,7 +29,8 @@ app.use(
 );
 app.use(json());
 app.use(logger());
-app.use(require("koa-static")(__dirname + "/public"));
+app.use(koaStatic(__dirname + "/public"));
+app.use(koaStatic(path.join(__dirname, "..", "uploadFiles")));
 //注册ejs的路径
 app.use(
   views(__dirname + "/views", {
@@ -61,6 +65,8 @@ app.use(
 // routes
 app.use(index.routes(), index.allowedMethods());
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods());
+app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods());
+
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods());
 app.use(errorViews.routes(), errorViews.allowedMethods());
 
