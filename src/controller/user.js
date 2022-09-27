@@ -12,8 +12,9 @@ const {
   registerUserNameExisted,
   registerFailInfo,
   loginFailInfo,
+  changeInfoFailInfo,
 } = require("../model/ErrorInfo");
-const { getUserInfo, createUser } = require("../services/user");
+const { getUserInfo, createUser, updateUser } = require("../services/user");
 
 const doCrypto = require("../utils/cryp");
 /**
@@ -63,8 +64,26 @@ async function login(ctx, userName, password) {
     return new ErrorModel(loginFailInfo);
   }
 }
+/**
+ * 修改用户信息
+ * @param {*} ctx ctx
+ * @param {*} param1
+ */
+async function changeInfo(ctx, { nickName, city, picture }) {
+  const { userName } = ctx.session.userInfo;
+  let result = await updateUser(
+    { newNickName: nickName, newCity: city, newPicture: picture },
+    { userName }
+  );
+  if (result) {
+    Object.assign(ctx.session.userInfo, { nickName, city, picture });
+    return new SuccessModel();
+  }
+  return new ErrorModel(changeInfoFailInfo);
+}
 module.exports = {
   isExist,
   register,
   login,
+  changeInfo,
 };

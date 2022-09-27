@@ -30,4 +30,8 @@ module.exports = {
     errno: 10007,
     message: "文件不能超过1M",
   },
+  changeInfoFailInfo: {
+    errno: 10008,
+    message: "修改信息基本信息失败",
+  },
 };

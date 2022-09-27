@@ -2,8 +2,14 @@
  * @description user 接口
  */
 const router = require("koa-router")();
-const { isExist, register, login } = require("../../controller/user");
+const {
+  isExist,
+  register,
+  login,
+  changeInfo,
+} = require("../../controller/user");
 const { genValidator } = require("../../middleWares/validate");
+const { loginCheck } = require("../../middlewares/loginChecks");
 const userValidate = require("../../validator/user");
 router.prefix("/api/user");
 //注册
@@ -21,4 +27,15 @@ router.post("/login", async (ctx, next) => {
   const { userName, password } = ctx.request.body;
   ctx.body = await login(ctx, userName, password);
 });
+
+//修改个人信息
+router.patch(
+  "/changeInfo",
+  loginCheck,
+  genValidator(userValidate),
+  async (ctx, next) => {
+    const { nickName, city, picture } = ctx.request.body;
+    ctx.body = await changeInfo(ctx, { nickName, city, picture });
+  }
+);
 module.exports = router;
