@@ -26,6 +26,10 @@ module.exports = {
     errno: 10005,
     message: "您尚未登录",
   },
+  changePasswordFailInfo: {
+    errno: 10006,
+    message: "修改密码失败",
+  },
   uploadSizeFailInfo: {
     errno: 10007,
     message: "文件不能超过1M",
