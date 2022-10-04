@@ -38,4 +38,8 @@ module.exports = {
     errno: 10008,
     message: "修改信息基本信息失败",
   },
+  createBlogFailInfo: {
+    errno: 11001,
+    message: "创建微博失败",
+  },
 };
