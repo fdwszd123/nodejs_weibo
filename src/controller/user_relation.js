@@ -10,6 +10,7 @@ const {
   getUsersByFollower,
   addFollower,
   deleteFollower,
+  getFollowersByUserId,
 } = require("../services/user_relation");
 /**
  * 获取粉丝列表
@@ -18,7 +19,13 @@ async function getFans(userId) {
   const result = await getUsersByFollower(userId);
   return new SuccessModel(result);
 }
-
+/**
+ * 获取关注列表
+ */
+async function getFollowers(userId) {
+  const result = await getFollowersByUserId(userId);
+  return new SuccessModel(result);
+}
 /**
  * 关注
  * @param {*} myUserId  当前要关注的
@@ -41,6 +48,7 @@ async function unFollow(myUserId, curUserId) {
 }
 module.exports = {
   getFans,
+  getFollowers,
   follow,
   unFollow,
 };

@@ -39,6 +39,10 @@
       <!-- 粉丝 -->
       <%- include('components/fans', { count: userData.fansData.count, userList:
       userData.fansData.list })%>
+
+      <!-- 关注 -->
+      <%- include('components/followers', { count: userData.followersData.count,
+      userList: userData.followersData.list })%>
     </div>
 
     <!-- 右侧结束 -->
