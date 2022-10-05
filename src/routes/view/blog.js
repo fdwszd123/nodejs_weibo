@@ -39,6 +39,11 @@ router.get("/profile/:userName", loginRedirect, async (ctx, next) => {
   //获取粉丝
   const fansInfo = await getFans(curUserInfo.id);
   const fansData = fansInfo.data;
+
+  // 我是否关注此人
+  const amIFollowed = fansData.list.some((item) => {
+    return item.userName === myUserName;
+  });
   await ctx.render("profile", {
     blogData: {
       isEmpty,
@@ -51,6 +56,7 @@ router.get("/profile/:userName", loginRedirect, async (ctx, next) => {
       userInfo: curUserInfo,
       isMe,
       fansData,
+      amIFollowed,
     },
   });
 });
