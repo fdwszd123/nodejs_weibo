@@ -16,6 +16,7 @@ const utilsApiRouter = require("./routes/api/utils");
 const blogViewRouter = require("./routes/view/blog");
 const blogHomeApiRouter = require("./routes/api/blog_home");
 const blogProfileApiRouter = require("./routes/api/blog_profile");
+const blogSquareApiRouter = require("./routes/api/blog_square");
 const errorViews = require("./routes/view/error");
 const { REDIS_CONF } = require("./conf/db");
 // error handler
@@ -73,6 +74,7 @@ app.use(userApiRouter.routes(), userApiRouter.allowedMethods());
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods());
 app.use(blogHomeApiRouter.routes(), blogHomeApiRouter.allowedMethods());
 app.use(blogProfileApiRouter.routes(), blogProfileApiRouter.allowedMethods());
+app.use(blogSquareApiRouter.routes(), blogSquareApiRouter.allowedMethods());
 app.use(errorViews.routes(), errorViews.allowedMethods());
 
 // error-handling
