@@ -6,7 +6,7 @@
  */
 const router = require("koa-router")();
 const { loginCheck } = require("../../middlewares/loginChecks");
-const { getProfileBlogList } = require("../../controller/blog-profile");
+const { getProfileBlogList } = require("../../controller/blog_profile");
 const { getBlogListStr } = require("../../utils/blog");
 router.prefix("/api/profile");
 router.get("loadMore/:userName/:pageIndex", loginCheck, async (ctx, next) => {

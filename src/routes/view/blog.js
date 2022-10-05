@@ -1,7 +1,9 @@
 const router = require("koa-router")();
 const { loginRedirect } = require("../../middlewares/loginChecks");
-const { getProfileBlogList } = require("../../controller/blog-profile");
+const { getProfileBlogList } = require("../../controller/blog_profile");
 const { getSquareBlogList } = require("../../controller/blog_square");
+const { getFans } = require("../../controller/user_relation");
+const { isExist } = require("../../controller/user");
 // 首页
 router.get("/", loginRedirect, async (ctx, next) => {
   await ctx.render("index");
@@ -15,6 +17,28 @@ router.get("/profile/:userName", loginRedirect, async (ctx, next) => {
   const result = await getProfileBlogList(userName);
   const { isEmpty, blogList, pageSize, pageIndex, count } = result.data;
 
+  let curUserInfo;
+  const myUserInfo = ctx.session.userInfo;
+  const myUserName = myUserInfo.userName;
+  const { userName: curUserName } = ctx.params;
+  const isMe = myUserName === curUserName;
+  if (isMe) {
+    // 是当前登录用户
+    curUserInfo = myUserInfo;
+  } else {
+    // 不是当前登录用户
+    const existResult = await isExist(curUserName);
+    if (existResult.errno !== 0) {
+      // 用户名不存在
+      return;
+    }
+    // 用户名存在
+    curUserInfo = existResult.data;
+  }
+
+  //获取粉丝
+  const fansInfo = await getFans(curUserInfo.id);
+  const fansData = fansInfo.data;
   await ctx.render("profile", {
     blogData: {
       isEmpty,
@@ -22,6 +46,11 @@ router.get("/profile/:userName", loginRedirect, async (ctx, next) => {
       pageSize,
       pageIndex,
       count,
+    },
+    userData: {
+      userInfo: curUserInfo,
+      isMe,
+      fansData,
     },
   });
 });
