@@ -4,6 +4,7 @@
 const {
   getAtRelationCount,
   getAtUserBlogList,
+  updateAtRelation,
 } = require("../services/at_relation");
 const { SuccessModel } = require("../model/ResModel");
 //获取艾特我的次数
@@ -24,7 +25,16 @@ async function getAtMeBlogList(userId, pageIndex = 0) {
     count,
   });
 }
+//标记已读
+async function markAsRead(userId) {
+  try {
+    await updateAtRelation({ userId, isRead: false, newIsRead: true });
+  } catch (ex) {
+    console.error(ex);
+  }
+}
 module.exports = {
   getAtMeBlogList,
   getAtMeCount,
+  markAsRead,
 };

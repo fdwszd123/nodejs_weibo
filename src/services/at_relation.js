@@ -56,8 +56,27 @@ async function getAtUserBlogList(userId, pageIndex = 0, pageSize = 5) {
     blogList,
   };
 }
+//更新内容
+async function updateAtRelation({ userId, newIsRead, isRead }) {
+  let updateData = {};
+  if (newIsRead) {
+    updateData.isRead = newIsRead;
+  }
+  let whereData = {};
+  if (userId) {
+    whereData.userId = userId;
+  }
+  if (isRead) {
+    whereData.isRead = isRead;
+  }
+  const result = AtRelation.update(updateData, {
+    where: whereData,
+  });
+  return result[0] > 0;
+}
 module.exports = {
   getAtUserBlogList,
   getAtRelationCount,
   createAtRelation,
+  updateAtRelation,
 };
