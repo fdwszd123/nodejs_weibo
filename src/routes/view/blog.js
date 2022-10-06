@@ -5,7 +5,7 @@ const { getSquareBlogList } = require("../../controller/blog_square");
 const { getFans, getFollowers } = require("../../controller/user_relation");
 const { isExist } = require("../../controller/user");
 const { getHomeBlogList } = require("../../controller/blog_home");
-const { getAtMeCount } = require("../../controller/blog_at");
+const { getAtMeCount, getAtMeBlogList } = require("../../controller/blog_at");
 // 首页
 router.get("/", loginRedirect, async (ctx, next) => {
   const userInfo = ctx.session.userInfo;
@@ -107,5 +107,24 @@ router.get("/square", loginRedirect, async (ctx, next) => {
       count,
     },
   });
+});
+//atMe
+router.get("/at-me", loginRedirect, async (ctx, next) => {
+  //获取at的数量
+  const userInfo = ctx.session.userInfo;
+  const { id: userId } = userInfo;
+  const atInfo = await getAtMeCount(userId);
+  const atCount = atInfo.data.count;
+  //获取微博列表
+  const blogInfo = await getAtMeBlogList(userId);
+  const blogData = blogInfo.data;
+  //渲染页面
+  await ctx.render("atMe", {
+    atCount,
+    blogData,
+  });
+  //标记为已读
+  if (atCount > 0) {
+  }
 });
 module.exports = router;
