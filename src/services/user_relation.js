@@ -6,6 +6,7 @@ const { User, UserRelation } = require("../db/model/index");
 /**
  * 根据followerId获取粉丝列表
  */
+const Sequelize = require("sequelize");
 async function getUsersByFollower(followerId) {
   const result = await User.findAndCountAll({
     attributes: ["id", "userName", "nickName", "picture"],
@@ -15,6 +16,9 @@ async function getUsersByFollower(followerId) {
         model: UserRelation,
         where: {
           followerId,
+          userId: {
+            [Sequelize.Op.ne]: followerId,
+          },
         },
       },
     ],
@@ -41,6 +45,9 @@ async function getFollowersByUserId(userId) {
     ],
     where: {
       userId,
+      followerId: {
+        [Sequelize.Op.ne]: userId,
+      },
     },
   });
 

@@ -2,9 +2,8 @@
  * @description user service
  */
 
-const { where } = require("sequelize");
 const { User } = require("../db/model");
-
+const { addFollower } = require("./user_relation");
 /**
  * 获取用户信息
  * @param {string} userName 用户名
@@ -38,7 +37,10 @@ async function createUser({ userName, password, gender = 3, nickName }) {
     gender,
     nickName: nickName || userName,
   });
-  return result.dataValues;
+
+  const data = result.dataValues;
+  await addFollower(data.id, data.id);
+  return data;
 }
 /**
  * 修改用户信息
