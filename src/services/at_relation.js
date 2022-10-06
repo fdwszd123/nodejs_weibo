@@ -53,7 +53,7 @@ async function getAtUserBlogList(userId, pageIndex = 0, pageSize = 5) {
   });
   return {
     count: result.count,
-    blogList: blogList,
+    blogList,
   };
 }
 module.exports = {

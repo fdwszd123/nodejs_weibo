@@ -14,7 +14,15 @@ async function getAtMeCount(userId) {
 //获取at用户的微博列表
 async function getAtMeBlogList(userId, pageIndex = 0) {
   const result = await getAtUserBlogList(userId, pageIndex);
-  return new SuccessModel(result);
+  const { count, blogList } = result;
+
+  return new SuccessModel({
+    isEmpty: blogList.length === 0,
+    blogList,
+    pageSize: 5,
+    pageIndex,
+    count,
+  });
 }
 module.exports = {
   getAtMeBlogList,
