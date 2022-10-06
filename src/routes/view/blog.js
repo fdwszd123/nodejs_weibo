@@ -5,6 +5,7 @@ const { getSquareBlogList } = require("../../controller/blog_square");
 const { getFans, getFollowers } = require("../../controller/user_relation");
 const { isExist } = require("../../controller/user");
 const { getHomeBlogList } = require("../../controller/blog_home");
+const { getAtMeCount } = require("../../controller/blog_at");
 // 首页
 router.get("/", loginRedirect, async (ctx, next) => {
   const userInfo = ctx.session.userInfo;
@@ -18,11 +19,15 @@ router.get("/", loginRedirect, async (ctx, next) => {
   //获取第一页数据
   const blogInfo = await getHomeBlogList(userId);
   const blogData = blogInfo.data;
+  //获取at的数量
+  const atInfo = await getAtMeCount(userId);
+  const atCount = atInfo.data.count;
   await ctx.render("index", {
     userData: {
       userInfo,
       fansData,
       followersData,
+      atCount,
     },
     blogData,
   });
@@ -65,6 +70,9 @@ router.get("/profile/:userName", loginRedirect, async (ctx, next) => {
   const amIFollowed = fansData.list.some((item) => {
     return item.userName === myUserName;
   });
+  //获取at的数量
+  const atInfo = await getAtMeCount(curUserInfo.id);
+  const atCount = atInfo.data.count;
   await ctx.render("profile", {
     blogData: {
       isEmpty,
@@ -79,6 +87,7 @@ router.get("/profile/:userName", loginRedirect, async (ctx, next) => {
       fansData,
       amIFollowed,
       followersData,
+      atCount,
     },
   });
 });

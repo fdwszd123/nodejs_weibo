@@ -10,7 +10,17 @@ async function createAtRelation(blogId, userId) {
   });
   return result.dataValues;
 }
-
+//获取用户未读的@数量
+async function getAtRelationCount(userId) {
+  const result = await AtRelation.findAndCountAll({
+    where: {
+      userId,
+      isRead: false,
+    },
+  });
+  return result.count;
+}
 module.exports = {
+  getAtRelationCount,
   createAtRelation,
 };
