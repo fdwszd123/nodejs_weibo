@@ -34,8 +34,8 @@ async function getBlogListByUser(userName, pageIndex = 0, pageSize = 10) {
   blogList = blogList.map((blogItem) => {
     let user = blogItem.user.dataValues;
     blogItem.user = user;
-    blogItem.createdAt = timeFormat(blogItem.createdAt);
-    blogItem.content = contentFormat(blogItem.content);
+    blogItem.createdAtFormat = timeFormat(blogItem.createdAt);
+    blogItem.contentFormat = contentFormat(blogItem.content);
 
     return blogItem;
   });
@@ -71,8 +71,8 @@ async function getFollowersBlogList(userId, pageIndex = 0, pageSize = 10) {
   });
   blogList = blogList.map((item) => {
     item.user = item.user.dataValues;
-    item.createdAt = timeFormat(item.createdAt);
-    item.content = contentFormat(item.content);
+    item.createdAtFormat = timeFormat(item.createdAt);
+    item.contentFormat = contentFormat(item.content);
     return item;
   });
   return {
