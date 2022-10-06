@@ -1,7 +1,7 @@
 /**
  * @description 微博service
  */
-const { timeFormat } = require("../utils/dt");
+const { timeFormat, contentFormat } = require("../utils/format");
 const { Blog, User, UserRelation } = require("../db/model/index");
 async function createBlog({ userId, image, content }) {
   const result = await Blog.create({
@@ -35,6 +35,7 @@ async function getBlogListByUser(userName, pageIndex = 0, pageSize = 10) {
     let user = blogItem.user.dataValues;
     blogItem.user = user;
     blogItem.createdAt = timeFormat(blogItem.createdAt);
+    blogItem.content = contentFormat(blogItem.content);
 
     return blogItem;
   });
@@ -71,6 +72,7 @@ async function getFollowersBlogList(userId, pageIndex = 0, pageSize = 10) {
   blogList = blogList.map((item) => {
     item.user = item.user.dataValues;
     item.createdAt = timeFormat(item.createdAt);
+    item.content = contentFormat(item.content);
     return item;
   });
   return {

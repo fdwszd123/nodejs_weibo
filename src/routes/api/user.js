@@ -2,6 +2,7 @@
  * @description user 接口
  */
 const router = require("koa-router")();
+const { getFollowers } = require("../../controller/user_relation");
 const {
   isExist,
   register,
@@ -51,6 +52,16 @@ router.patch(
     ctx.body = await changePassword({ userName, password, newPassword });
   }
 );
+//获取at列表
+router.get("/getAtList", loginCheck, async (ctx, next) => {
+  const { id: userId } = ctx.session.userInfo;
+  const result = await getFollowers(userId);
+  let { list } = result.data;
+  list = list.map((user) => {
+    return `${user.nickName} - ${user.userName}`;
+  });
+  ctx.body = list;
+});
 router.post("/logout", loginCheck, async (ctx, next) => {
   ctx.body = await logout(ctx);
 });

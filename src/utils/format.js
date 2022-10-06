@@ -11,7 +11,14 @@ const { format } = require("date-fns");
 function timeFormat(str) {
   return format(new Date(str), "MM.dd HH:mm");
 }
-
+function contentFormat(str) {
+  const REG = /@(.+?)\s-\s(\w+?)\b/g;
+  str = str.replace(REG, (matchStr, nickName, userName) => {
+    return `<a href="/profile/${userName}">@${nickName}</a>`;
+  });
+  return str;
+}
 module.exports = {
   timeFormat,
+  contentFormat,
 };
